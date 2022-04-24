@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  nginx_1:
+    image: nginx:latest
+    volumes:
+      - ./public:/var/www/public
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./logs:/var/log/nginx
+    restart: always
+    # ports:
+    #   - "80:80"
+    # expose:
+    #   - 80
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx_1.rule=Host(`nginx-one.local`)"
+      # - "traefik.http.routers.nginx_1.entrypoints=http"
+      # - "traefik.http.services.nginx_1.loadbalancer.server.port=80"
