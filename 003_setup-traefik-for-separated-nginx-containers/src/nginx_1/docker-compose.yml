@@ -11,7 +11,6 @@ services:
       - ./public:/var/www/public
       - ./default.conf:/etc/nginx/conf.d/default.conf
       - ./logs:/var/log/nginx
-    restart: always
     # ports:
     #   - "80:80"
     # expose:

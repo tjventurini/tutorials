@@ -9,7 +9,6 @@ services:
   traefik:
     # The official v2 Traefik docker image
     image: traefik:latest
-    restart: always
     # Enables the web UI and tells Traefik to listen to docker
     command:
       - "--api.insecure=true"

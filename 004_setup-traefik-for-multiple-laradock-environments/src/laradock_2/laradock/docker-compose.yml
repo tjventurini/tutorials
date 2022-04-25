@@ -427,8 +427,10 @@ services:
       - "traefik.enable=true"
       # - "traefik.http.services.nginx.loadbalancer.server.port=80"
       # - "traefik.http.routers.nginx.rule=Host(`laradock-two.local`)"
-      - "traefik.http.services.laradock-2-nginx.loadbalancer.server.port=80"
-      - "traefik.http.routers.laradock-2-nginx.rule=Host(`laradock-two.local`)"
+      # - "traefik.http.services.laradock-2-nginx.loadbalancer.server.port=80"
+      # - "traefik.http.routers.laradock-2-nginx.rule=Host(`laradock-two.local`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.rule=Host(`laradock-two.local`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.entrypoints=web"
 
   ### OpenResty Server #########################################
   openresty:

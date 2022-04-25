@@ -9,11 +9,10 @@ services:
   traefik:
     # The official v2 Traefik docker image
     image: traefik:latest
-    restart: always
     # Enables the web UI and tells Traefik to listen to docker
     command:
       - "--api.insecure=true"
-      # - "--entryPoints.http.address=:80"
+      - "--entryPoints.web.address=:80"
       - "--providers.docker"
       - "--providers.docker.exposedByDefault=false"
     ports:
