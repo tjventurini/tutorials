@@ -431,6 +431,7 @@ services:
       # - "traefik.http.routers.laradock-2-nginx.rule=Host(`laradock-two.local`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.rule=Host(`laradock-two.local`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.entrypoints=web"
+      - "traefik.docker.network=frontend"
 
   ### OpenResty Server #########################################
   openresty:
