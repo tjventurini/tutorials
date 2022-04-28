@@ -1,0 +1,15 @@
+version: '3.8'
+
+networks:
+  reverse-proxy:
+    external: true
+
+services:
+  second-local:
+    image: nginx:latest
+    networks:
+      - reverse-proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse-proxy"
+      - "traefik.http.routers.second-local.rule=Host(`second.local`)"
