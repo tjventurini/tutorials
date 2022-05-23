@@ -1,28 +1,61 @@
 version: '3.8'
 
+# Setup the network for the reverse proxy. 
+# All containers will be connected to this network.
 networks:
   default:
     internal: false
     name: reverse-proxy
 
 services:
-  reverse-proxy:
-    # The official v2 Traefik docker image
-    image: traefik:v2.6
-    # Enables the web UI and tells Traefik to listen to docker
+  traefik:
+    image: traefik:2.6
+    restart: always
     command:
-      - "--api.dashboard=true"
+      # We are going to use the docker provider
       - "--providers.docker"
+      # Only enabled containers should be exposed
       - "--providers.docker.exposedByDefault=false"
+      # We want to use the dashbaord
+      - "--api.dashboard=true"
+      # The entrypoints we ant to expose
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Enable ACME (Let's Encrypt): automatic SSL.
+      - "--certificatesresolvers.letsencrypt.acme.email=your.name@example.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      # Global redirect to https
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
     ports:
-      # The HTTP port
       - "80:80"
+      - "443:443"
     volumes:
-      # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # The acme.json file is required by Let's Encrypt
+      - ./letsencrypt/acme.json:/etc/traefik/acme/acme.json
     labels:
+      # Since we don't expose containers per default we also need to enable traefik to expose the dashboard.
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.localhost`)"
+      # http
+      # Since we are using the http challenge we and use the redirect we need 
+      #  to enable the http entrypoint.
+      - "traefik.http.routers.dashboard-http.entrypoints=web"
+      # The domain we want to listen to
+      - "traefik.http.routers.dashboard-http.rule=Host(`example.com`)"
+      # We need to attach the api@internal service to the dashboard-http router
+      #  in order for the dashboard to be able to access the api (I think 🙈)
+      - "traefik.http.routers.dashboard-http.service=api@internal"
+      # https
+      # Enable the https entrypoint
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      # The domain we want to listen to
+      - "traefik.http.routers.dashboard.rule=Host(`example.com`)"
+      # We want to obtain a certificate through Let's Encrypt
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      # We need to attach the api@internal service to the dashboard router
+      #  in order for the dashboard to be able to access the api (I think 🙈)
       - "traefik.http.routers.dashboard.service=api@internal"
-      # - "traefik.http.routers.dashboard.middlewares=auth"
-      # - "traefik.http.middlewares.auth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/,test2:$$apr1$$d9hr9HBB$$4HxwgUir3HP4EsggP/QNo0"
