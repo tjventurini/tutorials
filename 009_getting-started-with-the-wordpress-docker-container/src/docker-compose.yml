@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  reverse-proxy:
+    external: true
+
+services:
+  wordpress:
+    image: wordpress
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    volumes:
+      - ./wordpress:/var/www/html
+    networks:
+      - reverse-proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse-proxy"
+      # http
+      - "traefik.http.routers.tutorial-009-wordpress.rule=Host(`tutorial-9.localhost`)"
+      - "traefik.http.routers.tutorial-009-wordpress.entrypoints=web"
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - reverse-proxy
