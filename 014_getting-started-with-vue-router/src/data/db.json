@@ -1,0 +1,19 @@
+{
+    "jobs": [
+        {
+            "title": "Javascript Ninja",
+            "id": 1,
+            "details": "lorem"
+        },
+        {
+            "title": "Javascript Samurai",
+            "id": 2,
+            "details": "lorem"
+        },
+        {
+            "title": "Javascript Agent",
+            "id": 3,
+            "details": "lorem"
+        }
+    ]
+}
