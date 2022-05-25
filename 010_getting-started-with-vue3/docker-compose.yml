@@ -1,0 +1,20 @@
+version: '3.8'
+
+networks:
+  frontend:
+    external:
+      name: reverse-proxy-docker-traefik_routing
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - "./src:/usr/share/nginx/html"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse-proxy"
+      # http
+      - "traefik.http.routers.tutorial-010.rule=Host(`tutorial-010.localhost`)"
+      - "traefik.http.routers.tutorial-010.entrypoints=web"
+    networks:
+      - frontend

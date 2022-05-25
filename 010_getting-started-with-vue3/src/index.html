@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta
+            http-equiv="X-UA-Compatible"
+            content="IE=edge"
+        >
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+        <style>
+            .box {
+                padding: 100px 0px;
+                width: 400px;
+                text-align: center;
+                background: #ddd;
+                margin: 20px;
+                display: inline-block;
+            }
+
+            .fav {
+                background: #f00;
+            }
+
+        </style>
+        <script src="https://unpkg.com/vue"></script>
+        <title>Tutorial 010 - Getting started with Vue3</title>
+    </head>
+
+    <body>
+
+        <div id="app">
+            <h1>{{ greeting }}</h1>
+
+            <div v-if="showIntro">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque id sapiente ipsum provident? Unde
+                    saepe nesciunt itaque sed! Amet quod accusamus nobis animi dolorum maiores alias consectetur fugit
+                    architecto voluptates.</p>
+            </div>
+
+            <button v-on:click="toggleIntro">Toggle intro</button>
+            <button @click="toggleIntro">Toggle intro</button>
+
+            <!-- mouse events -->
+            <br>
+
+            <div
+                class="box"
+                @mouseover="handleEvent"
+            >mouseover (enter)</div>
+            <div
+                class="box"
+                @mouseleave="handleEvent"
+            >mouseleave</div>
+            <div
+                class="box"
+                @dblclick="handleEvent($event, 'double click')"
+            >double click</div>
+            <div
+                class="box"
+                @mousemove="handleMousemove"
+            >{{ x }} - {{ y }}</div>
+
+
+            <!-- loops -->
+            <br>
+
+            <ul>
+                <li
+                    v-for="book in books"
+                    :class="{ fav: book.isFav }"
+                    @click="toggleIsFav(book)"
+                >
+                    <h3>{{ book.title }}</h3>
+                    <p>by {{ book.author }}</p>
+                    <p>{{ book.pages }} pages</p>
+                </li>
+            </ul>
+
+            <!-- attribute binding -->
+            <br>
+
+            <a v-bind:href="vueCheatSheet">Link to Vue Cheat Sheet</a>
+            <br>
+            <a :href="vueCheatSheet">Also link to Vue Cheat Sheet</a>
+
+            <!-- computed properties -->
+            <br>
+
+            <ul>
+                <li
+                    v-for="book in favoriteBooks"
+                    :class="{ fav: book.isFav }"
+                    @click="toggleIsFav(book)"
+                >
+                    <h3>{{ book.title }}</h3>
+                    <p>by {{ book.author }}</p>
+                    <p>{{ book.pages }} pages</p>
+                </li>
+            </ul>
+
+        </div>
+
+        <script src="app.js"></script>
+    </body>
+
+</html>
