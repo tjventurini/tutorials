@@ -31,14 +31,27 @@
             Stop watching
         </button>
     </div>
+
+    <div class="blog">
+        <div class="errors" v-if="error">{{ error }}</div>
+        <div v-if="posts.length">
+            <PostList v-if="showPosts" :posts="posts" />
+        </div>
+        <div v-else>Loading ...</div>
+    </div>
+    <button @click="showPosts = !showPosts">Toggle posts</button>
+    <button @click="posts.pop()">Remove post</button>
 </template>
 
 <script>
 import { ref } from '@vue/reactivity'
 import { computed, watch, watchEffect } from '@vue/runtime-core'
+import PostList from '@/components/PostList.vue'
+import getPosts from '@/composables/getPosts'
 
 export default {
     name: 'Home',
+    components: { PostList },
     setup() {
         console.log('Setup runs first!')
 
@@ -75,6 +88,11 @@ export default {
             console.log('watchEffect function ran: ', search.value)
         })
 
+        const { posts, error, load } = getPosts()
+        load()
+
+        const showPosts = ref(true)
+
         return {
             name,
             age,
@@ -87,6 +105,9 @@ export default {
             matchingNames,
             stopWatch,
             stopWatchEffect,
+            posts,
+            showPosts,
+            error,
         }
     },
 }
