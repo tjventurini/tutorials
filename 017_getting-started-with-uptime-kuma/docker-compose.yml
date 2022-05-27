@@ -1,0 +1,21 @@
+version: '3.8'
+
+networks:
+  frontend:
+    external:
+      name: reverse-proxy
+
+services:
+  kuma:
+    image: louislam/uptime-kuma:1
+    volumes:
+      - ./data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse-proxy"
+      # http
+      - "traefik.http.routers.someservice.rule=Host(`uptime-kuma.localhost`)"
+      - "traefik.http.routers.someservice.entrypoints=web"
+      # add the network to the service configuration
+    networks:
+      - frontend
