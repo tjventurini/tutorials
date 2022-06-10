@@ -1,0 +1,39 @@
+version: '3.8'
+
+# setup the network
+networks:
+  frontend:
+    external:
+      name: reverse-proxy
+
+services:
+  db:
+    image: mariadb
+    command: --max-allowed-packet=64MB
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    env_file:
+      - ./db.env
+
+  app:
+    image: matomo
+    volumes:
+      #     - ./config:/var/www/html/config
+      #     - ./logs:/var/www/html/logs
+      - matomo:/var/www/html
+    environment:
+      - MATOMO_DATABASE_HOST=db
+    env_file:
+      - ./db.env
+    # add the labels to the service configuration
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=reverse-proxy"
+      # http
+      - "traefik.http.routers.matomo.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.matomo.entrypoints=web"
+    # add the network to the service configuration
+    networks:
+      - frontend
