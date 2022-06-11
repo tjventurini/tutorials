@@ -29,7 +29,7 @@ export default defineComponent({
         onMounted(() => {
             const r = new Rive({
                 canvas: canvas.value,
-                src: "../assets/burger-times.riv",
+                src: "assets/burger-times.riv",
                 layout: new Layout({
                     fit: Fit.Fill,
                     alignment: Alignment.Center,
