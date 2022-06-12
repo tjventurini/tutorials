@@ -9,22 +9,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue"
 import {
     Rive,
     Layout,
     Fit,
     Alignment,
     StateMachineInput,
-} from "@rive-app/canvas";
-import { StateMachine } from "@rive-app/canvas/rive_advanced.mjs";
+} from "@rive-app/canvas"
+import { StateMachine } from "@rive-app/canvas/rive_advanced.mjs"
 
 export default defineComponent({
     name: "MenuIcon",
     setup() {
-        const canvas = ref(null);
-        const state = ref(null);
-        let menuIconClickTrigger: StateMachineInput | undefined;
+        const canvas = ref(null)
+        const state = ref(null)
+        let menuIconClickTrigger: StateMachineInput | undefined
 
         onMounted(() => {
             const r = new Rive({
@@ -37,27 +37,27 @@ export default defineComponent({
                 autoplay: true,
                 stateMachines: "State Machine",
                 onLoad: (_) => {
-                    const inputs = r.stateMachineInputs("State Machine");
+                    const inputs = r.stateMachineInputs("State Machine")
                     menuIconClickTrigger = inputs.find(
                         (i) => i.name === "Click"
-                    );
+                    )
                 },
-            });
-        });
+            })
+        })
 
         const toggleMenuIcon = () => {
             if (menuIconClickTrigger) {
-                menuIconClickTrigger.fire();
+                menuIconClickTrigger.fire()
             }
-        };
+        }
 
         return {
             canvas,
             state,
             toggleMenuIcon,
-        };
+        }
     },
-});
+})
 </script>
 
 <style>
