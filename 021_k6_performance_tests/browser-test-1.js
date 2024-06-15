@@ -20,7 +20,7 @@ export default async function () {
   const page = browser.newPage()
 
   try {
-    await page.goto('https://thomasventurini.com')
+    await page.goto('https://test.k6.io')
     page.screenshot({ path: 'screenshots/screenshot.png' })
   } finally {
     page.close()
