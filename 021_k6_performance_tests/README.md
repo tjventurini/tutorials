@@ -50,10 +50,18 @@ docker run --rm -u "$(id -u):$(id -g)" -v "${PWD}:/xk6" grafana/xk6 build latest
     --with github.com/grafana/xk6-browser@latest
 ```
 
-### Run tests using the binary
+### Create test using the binary
 
 ```bash
-./k6 run --out 'web-dashboard=period=2s' test.js
+./k6 new test.js
+```
+
+### Run tests using the binary
+
+Now we can run tests using the binary including browser support (chromium) and a dashboard to follow along the tests.
+
+```bash
+./k6 run --out 'web-dashboard=period=2s&open=true' test.js
 ```
 
 ## Create screenshots of the page
